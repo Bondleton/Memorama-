@@ -14,3 +14,7 @@ const symbols = {
 }
 
 export default symbols
+
+// nivel facil: 8 tarjetas = 4 iconos
+// nivel medio: 16 tarjetas = 8 iconos
+// nivel dificil: 24 tarjetas = 12 iconos

@@ -1,87 +1,120 @@
-import React, { useEffect, useState } from 'react';
-import Button from './Button';
-import Card from './Card';
-import convertToTimer from './../logic/convertTimer';
-import arrCardsRand from '../logic/createArrCardsRand';
+import Button from "./Button";
+import Card from "./Card";
+import arrCardsRand from "../logic/createArrCardsRand";
+import React, { useEffect, useState } from "react";
+
+import io from "socket.io-client";
+import convertToTimer from "../logic/convertTimer";
 
 export default function GameScreen(props) {
-
-  // VARIABLES DE ESTADO
+  // Variables de estado
   const [cardsArr, setCardsArr] = useState([]);
-  const [moves, setMoves] = useState(0)
+  const [moves, setMoves] = useState(0);
+  const [selected, setSelected] = useState(0);
 
-  // GENERAR TARJETAS ALEATORIAS INICIALES
+  //Llamar a funcion aleatorio
   useEffect(() => {
-    setCardsArr( arrCardsRand(props.numCards) )
-  }, [props.numCards])
+    setCardsArr(arrCardsRand(props.numCards));
+  }, [props.numCards]);
 
-  // FUNCION: ROTAR
+  // 🔹 Función para rotar carta
   const rotate = (id, pinUp) => {
     if (pinUp === 0) {
-      setCardsArr(prevArr => {
-        prevArr[id].rotate = true;
-        prevArr[id].validating = 1;
-        return [...prevArr]
-      })
-      setTimeout(() => validate(), 500)
+      setCardsArr((prevArr) => {
+        const newArr = [...prevArr];
+        newArr[id].rotate = true;
+        newArr[id].validating = 1;
+        return newArr;
+      });
+      setTimeout(() => validate(), 500);
     }
-  }
+  };
 
-  // FUNCION: VALIDAR
+  // 🔹 Validar si hay pareja
   const validate = () => {
-    setMoves( moves + 1)
-    const validatingCards = cardsArr.filter(card => card.validating === 1)
+    setMoves((m) => m + 1);
+    const validatingCards = cardsArr.filter((c) => c.validating === 1);
 
     if (validatingCards.length === 2) {
 
       // elementos distintos, retornamos
       if (validatingCards[0].bind !== validatingCards[1].bind) {
-        setCardsArr(prevArr => {
-          prevArr[validatingCards[0].id].rotate = false;
-          prevArr[validatingCards[0].id].validating = 0;
-          prevArr[validatingCards[1].id].rotate = false;
-          prevArr[validatingCards[1].id].validating = 0;
-          return [...prevArr]
-        })
-      }
-
-      // elementos iguales
-      else {
-        setCardsArr(prevArr => {
-          prevArr[validatingCards[0].id].pinUp = 1;
-          prevArr[validatingCards[0].id].validating = 0;
-          prevArr[validatingCards[1].id].pinUp = 1;
-          prevArr[validatingCards[1].id].validating = 0;
-          return [...prevArr]
-        })
+        setCardsArr((prevArr) => {
+          const newArr = [...prevArr];
+          validatingCards.forEach((card) => {
+            newArr[card.id].rotate = false;
+            newArr[card.id].validating = 0;
+          });
+          return newArr;
+        });
+      } else {
+        setCardsArr((prevArr) => {
+          const newArr = [...prevArr];
+          validatingCards.forEach((card) => {
+            newArr[card.id].pinUp = 1;
+            newArr[card.id].validating = 0;
+          });
+          return newArr;
+        });
       }
     }
 
-    // verificamos que no haya elementos pendientes
-    const pinUpCards = cardsArr.filter( card => card.pinUp === 0).length
-    if(pinUpCards === 0) {
-      props.setFinish(2)
+    if (cardsArr.filter((c) => c.pinUp === 0).length === 0) {
+      props.setFinish(2);
     }
+  };
 
-  }
+  // 🔌 Conexión WebSocket con Socket.io
+  useEffect(() => {
+    const socket = io("http://172.31.3.97:3000");
+
+    socket.on("buttonPress", (data) => {
+      if (data.state !== "1") return;
+
+      switch (data.button) {
+        case "UP":
+          setSelected((s) => (s > 0 ? s - 1 : cardsArr.length - 1));
+          break;
+        case "DOWN":
+          setSelected((s) => (s < cardsArr.length - 1 ? s + 1 : 0));
+          break;
+        case "OK":
+          rotate(selected, cardsArr[selected].pinUp);
+          break;
+        case "RESET":
+          props.setRestart();
+          break;
+        default:
+          break;
+      }
+    });
+
+    return () => socket.disconnect();
+  }, [cardsArr, selected]);
 
   return (
-    <div className='gamescreen'>
-      <div className='gamescreen--score grid grid-2'>
-        <div className='gamescreen--moves'>
+    <div className="gamescreen">
+      <div className="gamescreen--score grid grid-2">
+        <div className="gamescreen--moves">
           <p>Movements: {moves}</p>
         </div>
-        <div className='gamescreen--time text-right'>
-          <p>Time: {convertToTimer(props.time)}</p>
+        <div className="gamescreen--moves">
+          <p className="text-right">Time: {convertToTimer(props.time)}</p>
         </div>
       </div>
-      <div className='gamescreen--cards grid grid-4'>
-        {
-          cardsArr
-            .sort((a, b) => a.id - b.id)
-            .map(card => {
-              return <Card
-                key={card.id}
+
+      <div className="gamescreen--cards grid grid-4">
+        {cardsArr
+          .sort((a, b) => a.id - b.id)
+          .map((card, index) => (
+            <div
+              key={card.id}
+              className={`p-1 ${index === selected
+                ? "border-4 border-green-400 rounded-xl"
+                : "border border-transparent"
+                }`}
+            >
+              <Card
                 id={card.id}
                 rotate={card.rotate}
                 symbol={card.symbol}
@@ -89,12 +122,13 @@ export default function GameScreen(props) {
                 bind={card.bind}
                 actionRotate={rotate}
               />
-            })
-        }
+            </div>
+          ))}
       </div>
-      <div className='text-center'>
-        <Button label="Restart game" action={props.setRestart} />
+
+      <div className="text-center mt-4">
+        <Button label="Reiniciar juego" action={props.setRestart} />
       </div>
     </div>
-  )
+  );
 }

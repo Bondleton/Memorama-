@@ -1,6 +1,6 @@
-import { useState } from "react";
-import MainScreen from "./components/MainScreen";
+import MainScreen from "./components/MainScreen"; 
 import GameScreen from "./components/GameScreen"
+import React, { useState } from "react";
 import FinishScreen from "./components/FinishScreen";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
   const [level, setLevel] = useState(0)
 
   // OBJETO CON NUMERO DE CARTAS, SEGUN NIVEL
-  const cardsByLevel = {
+  const cardsByLevel = { 
       0: 8,
       1: 16,
       2: 24
