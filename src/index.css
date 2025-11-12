@@ -7,6 +7,7 @@
   --color-card-back: rgb(60, 112, 163);
   --color-shadow: #000;
   --color-white: #fff;
+  --color-arrow: #1d2a50; /* Color para las flechas */
 
   /* Tamaños reutilizables */
   --border-radius: 15px;
@@ -94,6 +95,25 @@ body {
   font-size: 2em;
 }
 
+/* Contenedor del selector de nivel */
+.mainscreen--level-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
+}
+
+/* Flechas del selector de nivel */
+.mainscreen--arrow {
+  font-size: 2em;
+  /* cursor: pointer; */
+  padding: var(--spacing-md);
+  transition: all 0.3s ease;
+  user-select: none;
+  color: var(--color-arrow);
+}
+
 .logo-react {
   color: var(--color-primary);
   animation: spin 4s linear infinite;
@@ -120,6 +140,17 @@ body {
   border-radius: var(--border-radius);
   border: 3px solid var(--color-accent);
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  /* transform: translateY(-2px);
+  box-shadow: 4px 4px 8px var(--color-shadow); */
+  transform: scale(1.2);
+}
+
+.button:active {
+  transform: translateY(0);
 }
 
 /* game screen */
@@ -200,13 +231,72 @@ body {
   transform: rotateY(180deg);
 }
 
-@media only screen and (min-width: 992px) {
-  .card {
-    height: var(--card-height-desktop);
-  }
-}
-
 /* finish screen */
 .finishscreen {
   color: var(--color-primary);
+  font-size: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* min-height: 100vh; */
+  text-align: center;
+}
+
+.finishscreen--title {
+  margin: 0 0 var(--spacing-lg);
+  font-size: 6em;
+  color: var(--color-primary);
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .mainscreen--title {
+    font-size: 3em;
+  }
+  
+  .mainscreen--menu {
+    font-size: 1.5em;
+  }
+  
+  .mainscreen--arrow {
+    font-size: 1.5em;
+  }
+  
+  .button {
+    width: 280px;
+    font-size: 0.9em;
+  }
+  
+  .finishscreen--title {
+    font-size: 4em;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .mainscreen--title {
+    font-size: 2.5em;
+  }
+  
+  .mainscreen--menu {
+    font-size: 1.2em;
+  }
+  
+  .mainscreen--arrow {
+    font-size: 1.2em;
+    padding: 8px;
+  }
+  
+  .button {
+    width: 250px;
+    font-size: 0.8em;
+  }
+  
+  .mainscreen--level-selector {
+    gap: 8px;
+  }
+  
+  .finishscreen--title {
+    font-size: 3em;
+  }
 }
