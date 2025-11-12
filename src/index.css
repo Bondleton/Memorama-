@@ -7,7 +7,7 @@
   --color-card-back: rgb(60, 112, 163);
   --color-shadow: #000;
   --color-white: #fff;
-  
+
   /* Tamaños reutilizables */
   --border-radius: 15px;
   --border-radius-lg: 20px;
@@ -27,7 +27,7 @@
   margin: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -49,6 +49,15 @@ body {
 }
 
 .middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarjetas {
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,9 +141,9 @@ body {
 .card {
   background-color: transparent;
   width: 100%;
-  /* height: var(--card-height-mobile); */
-  /* height: 100px; */
-  /* perspective: 1000px; */
+  height: var(--card-height-mobile);
+  height: 100px;
+  perspective: 1000px;
   cursor: pointer;
 }
 
@@ -152,7 +161,7 @@ body {
 /* Ocultar el ícono inicialmente */
 .card--inner i {
   font-size: 2em;
-  opacity: 0;
+  /* opacity: 0; */
   transition: opacity 0.3s ease;
 }
 
@@ -201,4 +210,3 @@ body {
 .finishscreen {
   color: var(--color-primary);
 }
-

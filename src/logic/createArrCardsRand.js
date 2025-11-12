@@ -45,7 +45,7 @@ export default function arrCardsRand(numCards) {
 //         bind: i,
 //         rotate: false,
 //         validating: 0,
-//         fixed: 0,
+//         set: 0,
 //       })
 //       i++
 //       j++

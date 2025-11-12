@@ -12,3 +12,5 @@ export default function Card(props) {
         </div>
     )
 }
+
+// onClick = { () => props.actionRotate(props.id, props.pinUp) } 
