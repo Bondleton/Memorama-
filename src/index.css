@@ -416,3 +416,65 @@ body {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
 }
+
+/* ========== ESTILOS PARA MODO PREVIEW ========== */
+
+/* Indicador de modo preview */
+.preview-mode {
+  cursor: not-allowed;
+}
+
+@keyframes preview-pulse {
+  0%, 100% { 
+    transform: rotateY(180deg) scale(1);
+    box-shadow: 0 0 0 rgba(113, 202, 225, 0.4);
+  }
+  50% { 
+    transform: rotateY(180deg) scale(1.02);
+    box-shadow: 0 0 20px rgba(113, 202, 225, 0.8);
+  }
+}
+ojoj
+.preview-indicator { 
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 0.8em;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Contador regresivo */
+.preview-timer {
+  margin-top: 10px;
+}
+
+.countdown {
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: bold;
+  animation: pulse-timer 1s infinite;
+}
+
+@keyframes pulse-timer {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Botón deshabilitado durante preview */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.button:disabled:hover {
+  transform: none !important;
+}

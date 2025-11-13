@@ -10,17 +10,36 @@ export default function GameScreen(props) {
   const [cardsArr, setCardsArr] = useState([]);
   const [moves, setMoves] = useState(0);
   const [selected, setSelected] = useState(0);
-  const [isValidating, setIsValidating] = useState(false); // 🔒 bloquea jugadas
+  const [isValidating, setIsValidating] = useState(false);
+  const [showAllCards, setShowAllCards] = useState(true);
+  const [previewTimeLeft, setPreviewTimeLeft] = useState(3);
 
-  // Inicializar cartas aleatorias - ACTUALIZADO
+  // Inicializar cartas aleatorias
   useEffect(() => {
-    setCardsArr(arrCardsRand(props.numPairs, props.subject));
+    const newCards = arrCardsRand(props.numPairs, props.subject);
+    setCardsArr(newCards);
+    
+    setShowAllCards(true);
+    setPreviewTimeLeft(3);
+    
+    const interval = setInterval(() => {
+      setPreviewTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setShowAllCards(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [props.numPairs, props.subject]);
 
   // Función para rotar carta
   const rotate = (id, pinUp) => {
-    // Si está validando o la carta ya está levantada, no hacer nada
-    if (isValidating || pinUp === 1) return;
+    // Si está en modo preview, validando o la carta ya está levantada, no hacer nada
+    if (showAllCards || isValidating || pinUp === 1) return;
 
     setCardsArr((prevArr) => {
       const newArr = [...prevArr];
@@ -37,15 +56,16 @@ export default function GameScreen(props) {
 
   // Función para validar pares
   const validate = () => {
+    if (showAllCards) return;
+
     const validatingCards = cardsArr.filter((c) => c.validating === 1);
     if (validatingCards.length < 2) return;
 
-    setIsValidating(true); // Bloquear mientras se compara
+    setIsValidating(true);
 
     setMoves((m) => m + 1);
 
     if (validatingCards[0].bind !== validatingCards[1].bind) {
-      // No son iguales
       setTimeout(() => {
         setCardsArr((prevArr) => {
           const newArr = [...prevArr];
@@ -58,10 +78,9 @@ export default function GameScreen(props) {
           });
           return newArr;
         });
-        setIsValidating(false); //Desbloquear después de animación
+        setIsValidating(false);
       }, 800);
     } else {
-      // Son iguales
       setCardsArr((prevArr) => {
         const newArr = [...prevArr];
         validatingCards.forEach((card) => {
@@ -72,24 +91,23 @@ export default function GameScreen(props) {
           }
         });
 
-        // Si todas las cartas están arriba, ganar después de 1s
         if (newArr.every((c) => c.pinUp === 1)) {
           setTimeout(() => props.setFinish(2), 1000);
         }
 
         return newArr;
       });
-      setTimeout(() => setIsValidating(false), 500); // Pequeño delay antes de desbloquear
+      setTimeout(() => setIsValidating(false), 500);
     }
   };
 
-  // 🔌 Conexión WebSocket con Socket.io
+  // 🔌 Conexión WebSocket
   useEffect(() => {
     const socket = io("http://172.31.3.97:3000");
 
     socket.on("buttonPress", (data) => {
       if (data.state !== "1") return;
-      if (isValidating) return; // No permitir acciones durante validación
+      if (showAllCards || isValidating) return;
 
       switch (data.button) {
         case "UP":
@@ -112,7 +130,7 @@ export default function GameScreen(props) {
     });
 
     return () => socket.disconnect();
-  }, [cardsArr, selected, isValidating]);
+  }, [cardsArr, selected, isValidating, showAllCards]);
 
   return (
     <div className="gamescreen">
@@ -131,8 +149,17 @@ export default function GameScreen(props) {
           {props.subject.emoji} {props.subject.name}
         </h1>
         <p className="instruction">
-          Empareja las preguntas con sus respuestas
+          {showAllCards ? "🎯 Memoriza las posiciones..." : "Empareja las preguntas con sus respuestas"}
         </p>
+        
+        {/* Contador regresivo funcional */}
+        {showAllCards && (
+          <div className="preview-timer">
+            <div className="countdown">
+              ⏱️ Las cartas se voltearán en {previewTimeLeft}s
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="gamescreen--cards grid grid-4">
@@ -140,28 +167,33 @@ export default function GameScreen(props) {
           <div
             key={card.id}
             className={`p-1 ${
-              index === selected
+              index === selected && !showAllCards
                 ? "border-4 border-green-400 rounded-xl"
                 : "border border-transparent"
             }`}
           >
             <Card
               id={card.id}
-              rotate={card.rotate}
-              symbol={card.symbol} // Mantener por compatibilidad, pero ya no se usará
-              content={card.content} // Nueva prop
-              emoji={card.emoji}    // Nueva prop
-              type={card.type}      // Nueva prop
+              rotate={showAllCards ? true : card.rotate}
+              symbol={card.symbol}
+              content={card.content}
+              emoji={card.emoji}
+              type={card.type}
               bind={card.bind}
               pinUp={card.pinUp}
               actionRotate={rotate}
+              isPreview={showAllCards}
             />
           </div>
         ))}
       </div>
 
       <div className="text-center mt-4">
-        <Button label="Reiniciar juego" action={props.setRestart} />
+        <Button 
+          label={showAllCards ? "⏳ Preparando..." : "Reiniciar juego"} 
+          action={props.setRestart}
+          disabled={showAllCards}
+        />
       </div>
     </div>
   );
