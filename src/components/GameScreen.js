@@ -12,10 +12,10 @@ export default function GameScreen(props) {
   const [selected, setSelected] = useState(0);
   const [isValidating, setIsValidating] = useState(false); // 🔒 bloquea jugadas
 
-  // Inicializar cartas aleatorias
+  // Inicializar cartas aleatorias - ACTUALIZADO
   useEffect(() => {
-    setCardsArr(arrCardsRand(props.numCards));
-  }, [props.numCards]);
+    setCardsArr(arrCardsRand(props.numPairs, props.subject));
+  }, [props.numPairs, props.subject]);
 
   // Función para rotar carta
   const rotate = (id, pinUp) => {
@@ -99,7 +99,9 @@ export default function GameScreen(props) {
           setSelected((s) => (s < cardsArr.length - 1 ? s + 1 : 0));
           break;
         case "OK":
-          rotate(selected, cardsArr[selected]?.pinUp);
+          if (cardsArr[selected]) {
+            rotate(selected, cardsArr[selected].pinUp);
+          }
           break;
         case "RESET":
           props.setRestart();
@@ -116,25 +118,45 @@ export default function GameScreen(props) {
     <div className="gamescreen">
       <div className="gamescreen--score grid grid-2">
         <div className="gamescreen--moves">
-          <p>Movements: {moves}</p>
+          <h2>Movimientos: {moves}</h2>
         </div>
         <div className="gamescreen--moves">
-          <p className="text-right">Time: {convertToTimer(props.time)}</p>
+          <h2 className="text-right">Tiempo: {convertToTimer(props.time)}</h2>
         </div>
       </div>
 
+      {/* Información de la materia actual */}
+      <div className="text-center mb-4">
+        <h1 className="card--subject">
+          {props.subject.emoji} {props.subject.name}
+        </h1>
+        <p className="instruction">
+          Empareja las preguntas con sus respuestas
+        </p>
+      </div>
+
       <div className="gamescreen--cards grid grid-4">
-        {cardsArr.map((card) => (
-          <Card
+        {cardsArr.map((card, index) => (
+          <div
             key={card.id}
-            id={card.id}
-            rotate={card.rotate}
-            symbol={card.symbol}
-            bind={card.bind}
-            set={card.set}
-            actionRotate={rotate}
-            pinUp={card.pinUp}
-          />
+            className={`p-1 ${
+              index === selected
+                ? "border-4 border-green-400 rounded-xl"
+                : "border border-transparent"
+            }`}
+          >
+            <Card
+              id={card.id}
+              rotate={card.rotate}
+              symbol={card.symbol} // Mantener por compatibilidad, pero ya no se usará
+              content={card.content} // Nueva prop
+              emoji={card.emoji}    // Nueva prop
+              type={card.type}      // Nueva prop
+              bind={card.bind}
+              pinUp={card.pinUp}
+              actionRotate={rotate}
+            />
+          </div>
         ))}
       </div>
 

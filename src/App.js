@@ -2,18 +2,19 @@ import MainScreen from "./components/MainScreen";
 import GameScreen from "./components/GameScreen"
 import React, { useState } from "react";
 import FinishScreen from "./components/FinishScreen";
+import questionsData from "./logic/questionsData";
 
 function App() {
-
   // VARIABLES DE ESTADO
   const [stateGame, setStateGame] = useState(0)
   const [level, setLevel] = useState(0)
+  const [subject, setSubject] = useState("matemáticas")
 
-  // OBJETO CON NUMERO DE CARTAS, SEGUN NIVEL
-  const cardsByLevel = { 
-      0: 8,
-      1: 16,
-      2: 24
+  // OBJETO CON NUMERO DE PARES SEGUN NIVEL
+  const pairsByLevel = { 
+    0: 4,  // 8 cartas = 4 pares
+    1: 8,  // 16 cartas = 8 pares  
+    2: 12  // 24 cartas = 12 pares
   }
 
   // CAMBIAR DIFICULTAD
@@ -21,16 +22,22 @@ function App() {
     setLevel( level === 2 ? 0 : level + 1)
   }
 
-  // CAMBIAR EL ESTADO DE JUEGO 0: NO INICIADO, 1: EN PROCESO, 2:FINALIZAO
+  // CAMBIAR MATERIA
+  const changeSubject = () =>{
+    setSubject( subject === "matemáticas" ? "inglés" : "matemáticas")
+  }
+
+  // CAMBIAR EL ESTADO DE JUEGO
   const changeStateGame = ( value ) =>{
     setStateGame(value)
     if( value === 1) playTimer()
   }
 
-  // const reiniciar el juego
+  // REINICIAR EL JUEGO
   const restartGame = () => {
     setStateGame(0)
     setLevel(0)
+    setSubject("matemáticas")
     resetTimer()
   }
 
@@ -38,7 +45,6 @@ function App() {
   const [intervalId, setIntervalId] = useState(0);
   const [mainMiliseconds, setMainMiliseconds] = useState(0);
   const playTimer = () => { 
-
     if(intervalId) {
       clearInterval(intervalId);
       setIntervalId(0);
@@ -66,13 +72,17 @@ function App() {
         <MainScreen 
           setStart={changeStateGame} 
           level={level} 
-          changeDifficulty={changeDifficulty} 
+          changeDifficulty={changeDifficulty}
+          subject={subject}
+          changeSubject={changeSubject}
+          subjectsData={questionsData}
         /> : stateGame === 1 ?
         <GameScreen 
-          numCards={cardsByLevel[level]} 
+          numPairs={pairsByLevel[level]} // Cambiado de numCards a numPairs
           setRestart = {restartGame}
           setFinish={changeStateGame} 
           time={mainMiliseconds}
+          subject={questionsData[subject]}
         /> : <FinishScreen setRestart={restartGame} />
       }
     </div>

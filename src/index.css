@@ -67,6 +67,7 @@ body {
 /* grid */
 .grid {
   display: grid;
+  padding: var(--spacing-lg);
 }
 
 .grid-2 {
@@ -85,7 +86,7 @@ body {
 }
 
 .mainscreen--title {
-  margin: 0 0 var(--spacing-lg);
+  /* margin: 0 0 var(--spacing-lg); */
   font-size: 5em;
   color: var(--color-primary);
 }
@@ -101,7 +102,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin: var(--spacing-sm) 0;
+  /* margin: var(--spacing-sm) 0; */
 }
 
 /* Flechas del selector de nivel */
@@ -173,9 +174,14 @@ body {
   background-color: transparent;
   width: 100%;
   height: var(--card-height-mobile);
-  height: 100px;
+  height: 170px;
   perspective: 1000px;
   cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition: all 0.60s ease;
 }
 
 .card--inner {
@@ -249,25 +255,100 @@ body {
   color: var(--color-primary);
 }
 
+/* Estilos para el contenido de las cartas educativas */
+
+.card--subject {
+  font-size: 2em;
+  color: var(--color-primary);
+}
+
+.instruction {
+  font-size: 20px;
+  color: var(--color-primary);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+  text-align: center;
+}
+
+.card-text--math {
+  font-size: 3em;
+  font-weight: bold;
+  /* margin-bottom: 5px; */
+  line-height: 1.2;
+}
+
+.card-text {
+  font-size: 2em;
+  font-weight: bold;
+  /* margin-bottom: 5px; */
+  line-height: 1.2;
+}
+
+.card-emoji {
+  font-size: 4em;
+  /* margin-bottom: 8px; */
+}
+
+.card-type-badge {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+/* Solo borde superior */
+/* .card[data-type="question"] .card--back {
+  background-color: var(--color-white);
+  border-top: 6px solid #4CAF50;
+  color: #2E7D32;
+}
+
+.card[data-type="answer"] .card--back {
+  background-color: var(--color-white);
+  border-top: 6px solid #2196F3;
+  color: #1565C0;
+} */
+
+/* Responsive para texto en cartas */
+@media only screen and (max-width: 768px) {
+  .card-text {
+    font-size: 0.9em;
+  }
+
+  .card-emoji {
+    font-size: 1.5em;
+  }
+
+  .card-type-badge {
+    font-size: 0.7em;
+  }
+}
+
 /* Responsive */
 @media only screen and (max-width: 768px) {
   .mainscreen--title {
     font-size: 3em;
   }
-  
+
   .mainscreen--menu {
     font-size: 1.5em;
   }
-  
+
   .mainscreen--arrow {
     font-size: 1.5em;
   }
-  
+
   .button {
     width: 280px;
     font-size: 0.9em;
   }
-  
+
   .finishscreen--title {
     font-size: 4em;
   }
@@ -277,26 +358,61 @@ body {
   .mainscreen--title {
     font-size: 2.5em;
   }
-  
+
   .mainscreen--menu {
     font-size: 1.2em;
   }
-  
+
   .mainscreen--arrow {
     font-size: 1.2em;
     padding: 8px;
   }
-  
+
   .button {
     width: 250px;
     font-size: 0.8em;
   }
-  
+
   .mainscreen--level-selector {
     gap: 8px;
   }
-  
+
   .finishscreen--title {
     font-size: 3em;
   }
+}
+
+/* ========== ANIMACIONES SIMPLIFICADAS ========== */
+
+.finishscreen--title {
+  animation: title-celebration 2s ease-in-out;
+}
+
+@keyframes title-celebration {
+  0% {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.finishscreen p {
+  animation: fade-in-up 1s ease-out 0.5s both;
+}
+
+.finishscreen .button {
+  animation: 
+    gentle-float 1s ease-out 1s both,
+    gentle-pulse 2s ease-in-out 2s infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
