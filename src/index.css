@@ -1,0 +1,969 @@
+/* Variables CSS - Definir una sola vez los colores */
+:root {
+  --color-primary: #1d2a50;
+  --color-background: #faf6ee;
+  --color-accent: #71cae1;
+  --color-card-front: #bbb;
+  --color-card-back: rgb(60, 112, 163);
+  --color-shadow: #000;
+  --color-white: #fff;
+  --color-arrow: #1d2a50; /* Color para las flechas */
+
+  /* Tamaños reutilizables */
+  --border-radius: 15px;
+  --border-radius-lg: 20px;
+  --spacing-sm: 10px;
+  --spacing-md: 20px;
+  --spacing-lg: 50px;
+  --card-height-mobile: 100px;
+  --card-height-desktop: 250px;
+}
+
+/* Media Queries Mixin
+**********************/
+
+/* global */
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+}
+
+.container {
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarjetas {
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* grid */
+.grid {
+  display: grid;
+  padding: var(--spacing-lg);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* main screen */
+.mainscreen {
+  padding: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.mainscreen--title {
+  /* margin: 0 0 var(--spacing-lg); */
+  font-size: 5em;
+  color: var(--color-primary);
+}
+
+.mainscreen--menu {
+  padding: var(--spacing-md) var(--spacing-sm);
+  font-size: 2em;
+}
+
+/* Contenedor del selector de nivel */
+.mainscreen--level-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  /* margin: var(--spacing-sm) 0; */
+}
+
+/* Flechas del selector de nivel */
+.mainscreen--arrow {
+  font-size: 2em;
+  /* cursor: pointer; */
+  padding: var(--spacing-md);
+  transition: all 0.3s ease;
+  user-select: none;
+  color: var(--color-arrow);
+}
+
+.logo-react {
+  color: var(--color-primary);
+  animation: spin 4s linear infinite;
+  position: absolute;
+  margin: 0 var(--spacing-sm);
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* buttons */
+.button {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  width: 350px;
+  font-weight: bold;
+  font-size: 1em;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-sm) 0;
+  box-shadow: 2px 2px 5px var(--color-shadow);
+  border-radius: var(--border-radius);
+  border: 3px solid var(--color-accent);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  /* transform: translateY(-2px);
+  box-shadow: 4px 4px 8px var(--color-shadow); */
+  transform: scale(1.2);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* game screen */
+.gamescreen {
+  padding: var(--spacing-md);
+  width: 100%;
+}
+
+.gamescreen--score {
+  color: var(--color-primary);
+  padding: var(--spacing-sm);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* cards */
+.card {
+  background-color: transparent;
+  width: 100%;
+  height: var(--card-height-mobile);
+  height: 170px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition: all 0.60s ease;
+}
+
+.card--inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  box-shadow: 1px 1px 10px var(--color-shadow);
+  border-radius: var(--border-radius-lg);
+}
+
+/* Ocultar el ícono inicialmente */
+.card--inner i {
+  font-size: 2em;
+  /* opacity: 0; */
+  transition: opacity 0.3s ease;
+}
+
+/* Mostrar el ícono solo cuando la carta está girada */
+.rotate .card--back i {
+  opacity: 1;
+}
+
+@media only screen and (min-width: 992px) {
+  .card--inner i {
+    font-size: 4em;
+  }
+}
+
+.card--front,
+.card--back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius);
+  backface-visibility: hidden;
+}
+
+.card--front {
+  background-color: var(--color-card-front);
+  color: var(--color-background);
+}
+
+.card--back {
+  background-color: var(--color-card-back);
+  color: var(--color-white);
+  transform: rotateY(180deg);
+}
+
+.rotate .card--inner {
+  transform: rotateY(180deg);
+}
+
+/* finish screen */
+.finishscreen {
+  color: var(--color-primary);
+  font-size: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* min-height: 100vh; */
+  text-align: center;
+}
+
+.finishscreen--title {
+  margin: 0 0 var(--spacing-lg);
+  font-size: 6em;
+  color: var(--color-primary);
+}
+
+/* Estilos para el contenido de las cartas educativas */
+
+.card--subject {
+  font-size: 2em;
+  color: var(--color-primary);
+}
+
+.instruction {
+  font-size: 20px;
+  color: var(--color-primary);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+  text-align: center;
+}
+
+.card-text--math {
+  font-size: 3em;
+  font-weight: bold;
+  /* margin-bottom: 5px; */
+  line-height: 1.2;
+}
+
+.card-text {
+  font-size: 2em;
+  font-weight: bold;
+  /* margin-bottom: 5px; */
+  line-height: 1.2;
+}
+
+.card-emoji {
+  font-size: 4em;
+  /* margin-bottom: 8px; */
+}
+
+.card-type-badge {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+/* Solo borde superior */
+/* .card[data-type="question"] .card--back {
+  background-color: var(--color-white);
+  border-top: 6px solid #4CAF50;
+  color: #2E7D32;
+}
+
+.card[data-type="answer"] .card--back {
+  background-color: var(--color-white);
+  border-top: 6px solid #2196F3;
+  color: #1565C0;
+} */
+
+/* Responsive para texto en cartas */
+@media only screen and (max-width: 768px) {
+  .card-text {
+    font-size: 0.9em;
+  }
+
+  .card-emoji {
+    font-size: 1.5em;
+  }
+
+  .card-type-badge {
+    font-size: 0.7em;
+  }
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .mainscreen--title {
+    font-size: 3em;
+  }
+
+  .mainscreen--menu {
+    font-size: 1.5em;
+  }
+
+  .mainscreen--arrow {
+    font-size: 1.5em;
+  }
+
+  .button {
+    width: 280px;
+    font-size: 0.9em;
+  }
+
+  .finishscreen--title {
+    font-size: 4em;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .mainscreen--title {
+    font-size: 2.5em;
+  }
+
+  .mainscreen--menu {
+    font-size: 1.2em;
+  }
+
+  .mainscreen--arrow {
+    font-size: 1.2em;
+    padding: 8px;
+  }
+
+  .button {
+    width: 250px;
+    font-size: 0.8em;
+  }
+
+  .mainscreen--level-selector {
+    gap: 8px;
+  }
+
+  .finishscreen--title {
+    font-size: 3em;
+  }
+}
+
+/* ========== ANIMACIONES SIMPLIFICADAS ========== */
+
+.finishscreen--title {
+  animation: title-celebration 2s ease-in-out;
+}
+
+@keyframes title-celebration {
+  0% {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.finishscreen p {
+  animation: fade-in-up 1s ease-out 0.5s both;
+}
+
+.finishscreen .button {
+  animation: 
+    gentle-float 1s ease-out 1s both,
+    gentle-pulse 2s ease-in-out 2s infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ========== ESTILOS PARA MODO PREVIEW ========== */
+
+/* Indicador de modo preview */
+.preview-mode {
+  cursor: not-allowed;
+}
+
+@keyframes preview-pulse {
+  0%, 100% { 
+    transform: rotateY(180deg) scale(1);
+    box-shadow: 0 0 0 rgba(113, 202, 225, 0.4);
+  }
+  50% { 
+    transform: rotateY(180deg) scale(1.02);
+    box-shadow: 0 0 20px rgba(113, 202, 225, 0.8);
+  }
+}
+ojoj
+.preview-indicator { 
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 0.8em;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Contador regresivo */
+.preview-timer {
+  margin-top: 10px;
+}
+
+.countdown {
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: bold;
+  animation: pulse-timer 1s infinite;
+}
+
+@keyframes pulse-timer {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Botón deshabilitado durante preview */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.button:disabled:hover {
+  transform: none !important;
+}
+
+/* Estilos para la navegación con joystick */
+.selected-menu-item {
+    border: 3px solid #10b937 !important;
+    border-radius: 12px;
+    padding: 4px;
+    background-color: rgba(16, 185, 129, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mainscreen--level-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 12px;
+    border: 3px solid transparent;
+}
+
+.mainscreen--arrow {
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.instruction-small {
+    font-size: 0.9em;
+    color: #6B7280;
+    margin-top: 20px;
+}
+
+/* Resaltar carta seleccionada en el juego */
+.border-green-400 {
+    border-color: #10B981 !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+/* Estilos base si no los tienes */
+.text-center {
+    text-align: center;
+}
+
+.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.p-1 {
+    padding: 0.25rem;
+}
+
+.border-4 {
+    border-width: 4px;
+}
+
+.border {
+    border-width: 1px;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.border-transparent {
+    border-color: transparent;
+}
+
+/*Ajustar cartas*/
+/* GRID ADAPTABLE PARA LAS TARJETAS */
+.card-grid {
+  display: grid;
+  width: 100%;
+  height: calc(100vh - 120px); /* deja espacio para puntaje y top */
+  padding: 10px;
+  gap: 10px;
+
+  /* El grid se adapta a la pantalla automáticamente */
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-auto-rows: 1fr;
+}
+
+.card {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== GRID RESPONSIVO SIN SCROLL - CORREGIDO ========== */
+
+.gamescreen {
+  padding: var(--spacing-md);
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevenir scroll en el contenedor principal */
+}
+
+.gamescreen--score {
+  flex-shrink: 0;
+  padding: var(--spacing-sm);
+  position: relative; /* Cambiado de absolute para mejor flujo */
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.gamescreen--cards-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden; /* Prevenir scroll */
+}
+
+.gamescreen--cards {
+  display: grid;
+  gap: 12px;
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  align-content: start;
+}
+
+/* Configuraciones de grid específicas - CORREGIDAS */
+.grid-4-8 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  min-height: 400px; /* Altura mínima para 8 cartas */
+}
+
+.grid-4-16 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  min-height: 650px; /* Altura mínima para 16 cartas */
+}
+
+.grid-6-24 {
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  min-height: 500px; /* Altura mínima para 24 cartas */
+}
+
+/* Ajustar altura de cartas según la cantidad - MANTENIENDO TUS ESTILOS */
+.grid-4-8 .card {
+  height: 170px;
+}
+
+.grid-4-16 .card {
+  height: 140px;
+}
+
+.grid-6-24 .card {
+  height: 110px;
+}
+
+/* Asegurar que el contenido de las cartas se ajuste */
+.grid-4-16 .card-text {
+  font-size: 1.8em;
+}
+
+.grid-4-16 .card-emoji {
+  font-size: 3.2em;
+}
+
+.grid-4-16 .card-type-badge {
+  font-size: 0.75em;
+}
+
+.grid-6-24 .card-text {
+  font-size: 1.5em;
+}
+
+.grid-6-24 .card-emoji {
+  font-size: 2.8em;
+}
+
+.grid-6-24 .card-type-badge {
+  font-size: 0.7em;
+}
+
+/* Responsive para tablets - CORREGIDO */
+@media only screen and (max-width: 1024px) {
+  .grid-4-8 {
+    min-height: 350px;
+  }
+  
+  .grid-4-16 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    min-height: 550px;
+  }
+  
+  .grid-6-24 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    min-height: 600px;
+  }
+  
+  .grid-4-8 .card {
+    height: 150px;
+  }
+  
+  .grid-4-16 .card {
+    height: 120px;
+  }
+  
+  .grid-6-24 .card {
+    height: 90px;
+  }
+}
+
+/* Responsive para móviles - CORREGIDO */
+@media only screen and (max-width: 768px) {
+  .gamescreen {
+    padding: 10px;
+  }
+  
+  .gamescreen--cards {
+    gap: 8px;
+    padding: 5px;
+  }
+  
+  .grid-4-8 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    min-height: 250px;
+  }
+  
+  .grid-4-16 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    min-height: 400px;
+  }
+  
+  .grid-6-24 {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    min-height: 550px;
+  }
+  
+  .grid-4-8 .card {
+    height: 110px;
+  }
+  
+  .grid-4-16 .card {
+    height: 85px;
+  }
+  
+  .grid-6-24 .card {
+    height: 70px;
+  }
+  
+  /* Ajustar texto para móviles */
+  .grid-4-16 .card-text {
+    font-size: 1.4em;
+  }
+  
+  .grid-4-16 .card-emoji {
+    font-size: 2.5em;
+  }
+  
+  .grid-6-24 .card-text {
+    font-size: 1.2em;
+  }
+  
+  .grid-6-24 .card-emoji {
+    font-size: 2em;
+  }
+}
+
+/* Para pantallas muy pequeñas - CORREGIDO */
+@media only screen and (max-width: 480px) {
+  .grid-4-8 {
+    min-height: 200px;
+  }
+  
+  .grid-4-16 {
+    min-height: 320px;
+  }
+  
+  .grid-6-24 {
+    min-height: 450px;
+  }
+  
+  .grid-4-8 .card {
+    height: 90px;
+  }
+  
+  .grid-4-16 .card {
+    height: 70px;
+  }
+  
+  .grid-6-24 .card {
+    height: 55px;
+  }
+  
+  .grid-4-16 .card-text {
+    font-size: 1.1em;
+  }
+  
+  .grid-4-16 .card-emoji {
+    font-size: 2em;
+  }
+  
+  .grid-6-24 .card-text {
+    font-size: 0.9em;
+  }
+  
+  .grid-6-24 .card-emoji {
+    font-size: 1.6em;
+  }
+}
+
+/* Área del botón reiniciar */
+.gamescreen--restart {
+  flex-shrink: 0;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+/* Asegurar que no haya overflow en ningún elemento */
+.container, .tarjetas, .gamescreen, .gamescreen--cards-container, .gamescreen--cards {
+  overflow: hidden !important;
+}
+
+/* Ajustar información de la materia para mejor espaciado */
+.text-center.mb-4 {
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+.card--subject {
+  font-size: 1.8em;
+  /* margin-bottom: 8px; */
+}
+
+.instruction {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+/* ========== HEADER CON MATERIA E INSTRUCCIÓN EN DOS LÍNEAS ========== */
+
+.gamescreen--header {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.gamescreen--score-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gamescreen--moves {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.gamescreen--center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 5px; /* Espacio entre materia e instrucción */
+}
+
+.gamescreen--time {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Estilos para el contenido centrado */
+.gamescreen--score-grid h2 {
+  margin: 0;
+  font-size: 1.2em;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.card--subject {
+  font-size: 1.5em;
+  margin: 0;
+  color: var(--color-primary);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.instruction {
+  font-size: 1em;
+  margin: 0;
+  color: var(--color-primary);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.preview-timer {
+  margin-top: 5px;
+}
+
+.countdown {
+  font-size: 0.9em;
+  background: var(--color-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  display: inline-block;
+}
+
+/* Distribución más equilibrada para pantallas grandes */
+@media only screen and (min-width: 1200px) {
+  .gamescreen--score-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Responsive para tablets */
+@media only screen and (max-width: 768px) {
+  .gamescreen--score-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .gamescreen--moves,
+  .gamescreen--time {
+    justify-content: center;
+  }
+  
+  .gamescreen--score-grid h2 {
+    font-size: 1.1em;
+  }
+  
+  .card--subject {
+    font-size: 1.3em;
+  }
+  
+  .instruction {
+    font-size: 0.9em;
+  }
+}
+
+/* Responsive para móviles */
+@media only screen and (max-width: 480px) {
+  .gamescreen--header {
+    padding: 8px;
+  }
+  
+  .gamescreen--score-grid {
+    gap: 10px;
+  }
+  
+  .gamescreen--score-grid h2 {
+    font-size: 1em;
+  }
+  
+  .card--subject {
+    font-size: 1.1em;
+  }
+  
+  .instruction {
+    font-size: 0.8em;
+  }
+  
+  .countdown {
+    font-size: 0.8em;
+    padding: 3px 8px;
+  }
+}
